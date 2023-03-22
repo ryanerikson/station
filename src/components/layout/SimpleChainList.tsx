@@ -6,11 +6,12 @@ import { Tooltip } from "components/display"
 interface Props {
   list: InterchainNetwork[]
   onClick: (chainID: string) => void
+  closePopover: () => void
 }
 
 const cx = classNames.bind(styles)
 
-const SimpleChainList = ({ list, onClick }: Props) => {
+const SimpleChainList = ({ list, onClick, closePopover }: Props) => {
   const { displayChains } = useDisplayChains()
   const sortedList = list.sort((a, b) =>
     displayChains.includes(a.chainID) && !displayChains.includes(b.chainID)
@@ -19,6 +20,14 @@ const SimpleChainList = ({ list, onClick }: Props) => {
       ? 1
       : 0
   )
+
+  const handleDisabled = () => {
+    closePopover()
+    const modal = document.querySelector<HTMLElement>(".settings-modal")
+    if (modal) {
+      modal.style.display = "flex"
+    }
+  }
 
   return (
     <Tooltip
@@ -32,7 +41,9 @@ const SimpleChainList = ({ list, onClick }: Props) => {
               [styles.active]: displayChains.includes(chainID),
             })}
             onClick={() =>
-              displayChains.includes(chainID) ? onClick(chainID) : {}
+              displayChains.includes(chainID)
+                ? onClick(chainID)
+                : handleDisabled()
             }
           >
             <img src={icon} alt={name} />

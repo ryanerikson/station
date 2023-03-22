@@ -9,7 +9,7 @@ import DisplayChainsSetting from "./DisplayChainsSetting"
 import LanguageSetting from "./LanguageSetting"
 import CurrencySetting from "./CurrencySetting"
 import { useWallet, WalletStatus } from "@terra-money/wallet-provider"
-import { ModalButton } from "components/feedback"
+import { Modal, ModalButton } from "components/feedback"
 import SettingsButton from "components/layout/SettingsButton"
 import { useNetwork, useNetworkName } from "data/wallet"
 import { useCurrency } from "data/settings/Currency"
@@ -148,37 +148,80 @@ const Preferences = () => {
   }
 
   return (
-    <ModalButton
-      title={
-        page ? (
-          <>
-            <button
-              className={styles.back}
-              onClick={() =>
-                page === "lcd" ? setPage("network") : setPage(null)
-              }
-            >
-              <BackIcon width={18} height={18} />
-            </button>
-            {routes[page].tab}
-          </>
-        ) : (
-          t("Settings")
-        )
-      }
-      renderButton={(open) => (
-        <HeaderIconButton
-          onClick={() => {
-            open()
-            setPage(null)
-          }}
-        >
-          <SettingsIcon style={{ fontSize: 18 }} />
-        </HeaderIconButton>
-      )}
-    >
-      {renderSettings()}
-    </ModalButton>
+    <>
+      <HeaderIconButton
+        onClick={() => {
+          const modal = document.querySelector<HTMLElement>(".settings-modal")
+          if (modal) {
+            modal.style.display = "flex"
+          }
+          setPage(null)
+        }}
+      >
+        <SettingsIcon style={{ fontSize: 18 }} />
+      </HeaderIconButton>
+      <Modal
+        title={
+          page ? (
+            <>
+              <button
+                className={styles.back}
+                onClick={() =>
+                  page === "lcd" ? setPage("network") : setPage(null)
+                }
+              >
+                <BackIcon width={18} height={18} />
+              </button>
+              {routes[page].tab}
+            </>
+          ) : (
+            t("Settings")
+          )
+        }
+        isOpen={true}
+        overrideClassName={"settings-modal"}
+        onRequestClose={() => {
+          const modal = document.querySelector<HTMLElement>(".settings-modal")
+          if (modal) {
+            modal.style.display = "none"
+          }
+          setPage(null)
+        }}
+      >
+        {renderSettings()}
+      </Modal>
+    </>
+    // <ModalButton
+    //   title={
+    //     page ? (
+    //       <>
+    //         <button
+    //           className={styles.back}
+    //           onClick={() =>
+    //             page === "lcd" ? setPage("network") : setPage(null)
+    //           }
+    //         >
+    //           <BackIcon width={18} height={18} />
+    //         </button>
+    //         {routes[page].tab}
+    //       </>
+    //     ) : (
+    //       t("Settings")
+    //     )
+    //   }
+    //   renderButton={(open) => (
+    //     <HeaderIconButton
+    //       onClick={() => {
+    //         open()
+    //         setPage(null)
+    //       }}
+    //     >
+    //       <SettingsIcon style={{ fontSize: 18 }} />
+    //     </HeaderIconButton>
+    //   )}
+    // >
+    //   {renderSettings()}
+    // </ModalButton>
   )
 }
 

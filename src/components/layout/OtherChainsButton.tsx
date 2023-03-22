@@ -27,7 +27,13 @@ const OtherChainsButton = ({ list, handleSetChain }: Props) => {
       maxWidth={200}
       key={key}
       placement="bottom"
-      content={<SimpleChainList onClick={onClick} list={list} />}
+      content={
+        <SimpleChainList
+          onClick={onClick}
+          list={list}
+          closePopover={closePopover}
+        />
+      }
     >
       <button className={styles.button}>+ {list.length}</button>
     </Popover>

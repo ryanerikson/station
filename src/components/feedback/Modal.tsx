@@ -23,19 +23,22 @@ interface ModalProps {
   /* style */
   confirm?: boolean
   maxHeight?: boolean | number
+  overrideClassName?: string
 }
 
 export interface Props extends ModalProps, ReactModal.Props {}
 
 const Modal = (props: PropsWithChildren<Props>) => {
-  const { title, children, footer } = props
+  const { title, children, footer, overrideClassName } = props
   const { icon, closeIcon, onRequestClose, confirm, maxHeight } = props
 
   return (
     <ReactModal
       {...props}
-      className={styles.modal}
-      overlayClassName={styles.overlay}
+      // style={displayNone ? { display: 'none' } : {}}
+      style={{ overlay: { display: "none" } }}
+      className={`${styles.modal}`}
+      overlayClassName={`${styles.overlay} ${overrideClassName}`}
     >
       {onRequestClose && (
         <button type="button" className={styles.close} onClick={onRequestClose}>
